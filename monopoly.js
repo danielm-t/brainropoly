@@ -12,8 +12,8 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = Math.floor(Math.random() * 6) + 1;
-		die2 = Math.floor(Math.random() * 6) + 1;
+		die1 = 5;
+		die2 = 15;
 		// die1 = 15;
 		// die2 = 15;
 		areDiceRolled = true;
@@ -1115,7 +1115,7 @@ function Player(name, color) {
 	this.name = name;
 	this.color = color;
 	this.position = 0;
-	this.money = 9001;
+	this.money = 1500;
 	this.creditor = -1;
 	this.jail = false;
 	this.jailroll = 0;
@@ -1260,7 +1260,9 @@ function popup(HTML, action, option) {
 			$("#popupbackground").fadeOut(400);
 		});
 
-		$("#popupyes").on("click", action);
+		$("#popupyes").on("click", function() {
+			showWin(p, "Player " + p.name + " is the first to have negative aura. GG Loser :P", "gifs/pepe-loser.gif");
+		});
 
 	// Ok
 	} else if (option !== "blank") {
@@ -2298,7 +2300,7 @@ function land(increasedRent) {
 	addAlert(p.name + " landed on " + s.name + ".");
 	console.log(s);
 	if (s.name == "9001 Zone" && p.money > 9000)
-		console.log("player " + p.name + " has won because they have over 9000 aura.")
+		showWin(p, "Player " + player.name + " is the ultimate rizzler as they have over 9000 aura.", "gifs/gigachad.gif");
 
 	// Allow player to buy the property on which he landed.
 	if (s.price !== 0 && s.owner === 0) {
@@ -2616,6 +2618,70 @@ function showRandomGif() {
     }, 60000);
 }
 
+function showWin(player, msg, gif_path) {
+    // Set game state to over
+    gameOver = true;
+
+    const gifContainer = document.createElement("div");
+    gifContainer.id = "gifContainer";
+    gifContainer.style.position = "fixed";
+    gifContainer.style.top = "0";
+    gifContainer.style.left = "0";
+    gifContainer.style.width = "100%";
+    gifContainer.style.height = "100%";
+    gifContainer.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    gifContainer.style.zIndex = "9999";
+    gifContainer.style.display = "flex";
+    gifContainer.style.flexDirection = "column"; 
+    gifContainer.style.justifyContent = "center";
+    gifContainer.style.alignItems = "center";
+
+    // Player name at the top
+    const playerName = document.createElement("div");
+    playerName.textContent = "Player " + player.name;
+    playerName.style.color = "white";
+    playerName.style.fontSize = "24px";
+    playerName.style.marginBottom = "10px"; // Space below the text
+    gifContainer.appendChild(playerName);
+
+    // Arrow pointing down
+    const arrow = document.createElement("div");
+    arrow.textContent = "↓"; // Unicode character for arrow
+    arrow.style.fontSize = "48px"; // Size of the arrow
+    arrow.style.color = "white";
+    arrow.style.marginBottom = "20px"; // Space before the GIF
+    gifContainer.appendChild(arrow);
+
+    const gifs = [
+        gif_path,
+    ];
+    const randomGif = gifs[0];
+
+    const img = document.createElement("img");
+    img.src = randomGif;
+    img.style.maxWidth = "80%";
+    img.style.maxHeight = "80%";
+    gifContainer.appendChild(img);
+
+    // Create the text element
+    const text = document.createElement("div");
+	text.textContent = msg;
+    text.style.color = "white";
+    text.style.marginTop = "20px";
+    text.style.fontSize = "20px";
+    text.style.textAlign = "center";
+    gifContainer.appendChild(text);
+
+    // Game Over Message
+    const gameOverMessage = document.createElement("div");
+    gameOverMessage.textContent = "Game Over";
+    gameOverMessage.style.color = "red";
+    gameOverMessage.style.fontSize = "30px";
+    gameOverMessage.style.marginTop = "20px";
+    gifContainer.appendChild(gameOverMessage);
+
+    document.body.appendChild(gifContainer);
+}
 
 
 function play() {
