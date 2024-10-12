@@ -2,6 +2,7 @@ const alreadyOwnedSound = new Audio('sounds/hellnah.mp3');
 const bingChillingSound = new Audio('sounds/bing-chilling.mp3');
 const gigaChadSound = new Audio('sounds/gigachad.mp3');
 const kikiSound = new Audio('sounds/kiki.mp3');
+const ckSound = new Audio('sounds/ck.mp3');
 
 function Game() {
 	var die1;
@@ -15,8 +16,10 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = Math.floor(Math.random() * 6) + 1;
-		die2 = Math.floor(Math.random() * 6) + 1;
+		// die1 = Math.floor(Math.random() * 6) + 1;
+		// die2 = Math.floor(Math.random() * 6) + 1;
+		die1 = 6;
+		die2 = 6;
 		areDiceRolled = true;
 	};
 
@@ -2464,8 +2467,18 @@ function roll() {
 		updateDice(die1, die2);
 
 		if (doublecount < 3) {
-			document.getElementById("nextbutton").value = "Roll again";
-			document.getElementById("nextbutton").title = "You threw doubles. Roll again.";
+			showCK().then(result => {
+				if (result) {
+					addAlert("Player " + p.name + " clicked 100 times within 30 seconds. They were granted another roll.");
+					document.getElementById("nextbutton").value = "Roll again";
+					document.getElementById("nextbutton").title = "You threw doubles. Roll again.";
+				} else {
+					addAlert("Player " + p.name + " did not click 100 times within 30 seconds. They lost their extra roll.");
+					document.getElementById("nextbutton").value = "End turn";
+					document.getElementById("nextbutton").title = "End turn and advance to the next player.";
+					doublecount = 0;
+				}
+			});
 
 		// If player rolls doubles three times in a row, send him to jail
 		} else if (doublecount === 3) {
@@ -2656,6 +2669,105 @@ function showRandomGif() {
         document.body.removeChild(gifContainer);
     }, 20000); // Match timeout duration to 20 seconds
 }
+
+function showCK() {
+    return new Promise((resolve) => {
+        const popupContainer = document.createElement("div");
+        popupContainer.style.position = "fixed";
+        popupContainer.style.top = "0";
+        popupContainer.style.left = "0";
+        popupContainer.style.width = "100%";
+        popupContainer.style.height = "100%";
+        popupContainer.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+        popupContainer.style.zIndex = "9999";
+        popupContainer.style.display = "flex";
+        popupContainer.style.flexDirection = "column";
+        popupContainer.style.justifyContent = "center";
+        popupContainer.style.alignItems = "center";
+
+        let totalClicks = 0;
+        const targetClicks = 100;
+        const timeLimit = 30; // 30 seconds
+		ckSound.play();
+
+        // Message about clicking goal
+        const message = document.createElement("div");
+        message.textContent = `You have to click ${targetClicks} times in ${timeLimit} seconds or you lose your double roll!`;
+        message.style.color = "white";
+        message.style.marginBottom = "20px";
+        popupContainer.appendChild(message);
+
+        const cookieImage = document.createElement("img");
+        cookieImage.src = "images/cookie.webp"; // Use your cookie image
+        cookieImage.alt = "Cookie";
+        cookieImage.style.width = "150px"; // Adjust size as needed
+        cookieImage.style.cursor = "pointer";
+
+        const clickCountDisplay = document.createElement("div");
+        clickCountDisplay.textContent = `Total Clicks: ${totalClicks}`;
+        clickCountDisplay.style.marginTop = "20px";
+        clickCountDisplay.style.color = "white"; // Ensure text is visible
+
+        cookieImage.addEventListener("click", () => {
+            totalClicks++;
+            clickCountDisplay.textContent = `Total Clicks: ${totalClicks}`;
+            if (totalClicks >= targetClicks) {
+                clearInterval(countdown);
+				ckSound.pause();
+                closePopup(true);
+            }
+        });
+
+        popupContainer.appendChild(cookieImage);
+        popupContainer.appendChild(clickCountDisplay);
+
+        const progressBarContainer = document.createElement("div");
+        progressBarContainer.style.width = "40%";
+        progressBarContainer.style.height = "20px";
+        progressBarContainer.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+        progressBarContainer.style.borderRadius = "10px";
+        progressBarContainer.style.overflow = "hidden";
+        progressBarContainer.style.marginTop = "10px"; 
+
+        const progressBar = document.createElement("div");
+        progressBar.style.height = "100%";
+        progressBar.style.width = "100%";
+        progressBar.style.backgroundColor = "red";
+        progressBar.style.transition = "width 1s linear";
+        progressBarContainer.appendChild(progressBar);
+
+        let remainingTime = timeLimit; // Set to 30 seconds
+        const decrementTime = () => {
+            remainingTime -= 1;
+            const percentage = (remainingTime / timeLimit) * 100;
+            progressBar.style.width = `${percentage}%`;
+
+            if (remainingTime <= 0) {
+                clearInterval(countdown);
+                closePopup(false);
+            }
+        };
+
+        popupContainer.appendChild(progressBarContainer);
+        document.body.appendChild(popupContainer);
+
+        const countdown = setInterval(decrementTime, 1000);
+
+        // Function to close the popup and resolve the promise
+        function closePopup(result) {
+            clearInterval(countdown);
+            document.body.removeChild(popupContainer);
+            resolve(result); // Resolve the promise with the result
+        }
+
+        // Automatically remove the container after the time limit
+        setTimeout(() => {
+            clearInterval(countdown);
+            closePopup(false);
+        }, timeLimit * 1000);
+    });
+}
+
 
 function showWin(player, msg, gif_path) {
     // Set game state to over
