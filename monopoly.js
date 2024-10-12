@@ -14,8 +14,6 @@ function Game() {
 	this.rollDice = function() {
 		die1 = Math.floor(Math.random() * 6) + 1;
 		die2 = Math.floor(Math.random() * 6) + 1;
-		// die1 = 15;
-		// die2 = 15;
 		areDiceRolled = true;
 	};
 
@@ -2557,22 +2555,48 @@ function showRandomGif() {
 
     const gifs = [
         "gifs/jail/1.gif",
-        "gifs/jail/2.gif",
+        "gifs/jail/2.mp4",
         "gifs/jail/3.webp",
         "gifs/jail/4.webp",
         "gifs/jail/5.webp",
+        "gifs/jail/6.mp4",
+        "gifs/jail/7.mp4",
+        "gifs/jail/8.mp4",
+        "gifs/jail/9.mp4",
+        "gifs/jail/10.mp4",
+        "gifs/jail/11.mp4",
+        "gifs/jail/12.mp4",
     ];
     const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
 
-    const img = document.createElement("img");
-    img.src = randomGif;
-    img.style.maxWidth = "80%";
-    img.style.maxHeight = "80%";
-    gifContainer.appendChild(img);
+    let mediaElement;
+
+    if (randomGif.endsWith('.mp4')) {
+        // Create a video element for MP4 files without controls
+        mediaElement = document.createElement("video");
+        mediaElement.src = randomGif;
+        mediaElement.autoplay = true; // Start playing immediately
+        mediaElement.muted = true; // Mute if desired (required for autoplay in some browsers)
+        mediaElement.style.maxWidth = "80%";
+        mediaElement.style.maxHeight = "80%";
+        mediaElement.style.borderRadius = "10px"; // Optional: Add border radius
+        mediaElement.addEventListener('ended', () => {
+            clearInterval(countdown);
+            document.body.removeChild(gifContainer);
+        });
+    } else {
+        // Create an img element for GIF/WebP files
+        mediaElement = document.createElement("img");
+        mediaElement.src = randomGif;
+        mediaElement.style.maxWidth = "80%";
+        mediaElement.style.maxHeight = "80%";
+    }
+
+    gifContainer.appendChild(mediaElement);
 
     // Create the text element
     const text = document.createElement("div");
-    text.textContent = "You've been doomed to watch brainrot for 60 seconds!";
+    text.textContent = "You've been doomed to watch brainrot for 20 seconds!";
     text.style.color = "white";
     text.style.marginTop = "20px";
     text.style.fontSize = "20px";
@@ -2595,14 +2619,15 @@ function showRandomGif() {
     progressBar.style.transition = "width 1s linear";
     progressBarContainer.appendChild(progressBar);
 
-    let remainingTime = 60;
+    let remainingTime = 20; // Adjusted to match the timeout duration
     const decrementTime = () => {
         remainingTime -= 1;
-        const percentage = (remainingTime / 60) * 100;
+        const percentage = (remainingTime / 20) * 100;
         progressBar.style.width = `${percentage}%`;
         
         if (remainingTime <= 0) {
             clearInterval(countdown);
+            document.body.removeChild(gifContainer);
         }
     };
 
@@ -2610,10 +2635,11 @@ function showRandomGif() {
 
     document.body.appendChild(gifContainer);
 
+    // Automatically remove the container after 20 seconds
     setTimeout(() => {
         clearInterval(countdown);
         document.body.removeChild(gifContainer);
-    }, 60000);
+    }, 20000); // Match timeout duration to 20 seconds
 }
 
 
