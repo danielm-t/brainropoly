@@ -2469,11 +2469,11 @@ function roll() {
 		if (doublecount < 3) {
 			showCK().then(result => {
 				if (result) {
-					addAlert("Player " + p.name + " clicked 100 times within 30 seconds. They were granted another roll.");
+					addAlert("Player " + p.name + " clicked 50 times within 15 seconds. They were granted another roll.");
 					document.getElementById("nextbutton").value = "Roll again";
 					document.getElementById("nextbutton").title = "You threw doubles. Roll again.";
 				} else {
-					addAlert("Player " + p.name + " did not click 100 times within 30 seconds. They lost their extra roll.");
+					addAlert("Player " + p.name + " did not click 50 times within 15 seconds. They lost their extra roll.");
 					document.getElementById("nextbutton").value = "End turn";
 					document.getElementById("nextbutton").title = "End turn and advance to the next player.";
 					doublecount = 0;
@@ -2686,8 +2686,8 @@ function showCK() {
         popupContainer.style.alignItems = "center";
 
         let totalClicks = 0;
-        const targetClicks = 100;
-        const timeLimit = 30; // 30 seconds
+        const targetClicks = 50;
+        const timeLimit = 15; // 30 seconds
 		ckSound.play();
 
         // Message about clicking goal
