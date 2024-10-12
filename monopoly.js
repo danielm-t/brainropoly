@@ -1,4 +1,7 @@
 const alreadyOwnedSound = new Audio('sounds/hellnah.mp3');
+const bingChillingSound = new Audio('sounds/bing-chilling.mp3');
+const gigaChadSound = new Audio('sounds/gigachad.mp3');
+const kikiSound = new Audio('sounds/kiki.mp3');
 
 function Game() {
 	var die1;
@@ -12,8 +15,8 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = 5;
-		die2 = 15;
+		die1 = 1;
+		die2 = 10;
 		// die1 = 15;
 		// die2 = 15;
 		areDiceRolled = true;
@@ -2317,9 +2320,10 @@ function land(increasedRent) {
 
 		game.addPropertyToAuctionQueue(p.position);
 	}
-
+	var alreadyOwned = false;
 	// Collect rent
 	if (s.owner !== 0 && s.owner != turn && !s.mortgage) {
+		alreadyOwned = true;
 		var groupowned = true;
 		var rent;
 
@@ -2410,6 +2414,15 @@ function land(increasedRent) {
 	// Luxury Tax
 	if (p.position === 38) {
 		luxurytax();
+	}
+
+	if (! alreadyOwned){
+		if (s.name == "Bing Chilling Way")
+			bingChillingSound.play();
+		else if (s.name == "GigaChad Express")
+			gigaChadSound.play();
+		else if (s.name == "Kiki, Do You Love Me? Street")
+			kikiSound.play();
 	}
 
 	updateMoney();
