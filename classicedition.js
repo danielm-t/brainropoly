@@ -39,7 +39,7 @@ function corrections() {
 
 	// Add images to enlarges.
 	document.getElementById("enlarge5token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; bottom: 20px;" />';
-	document.getElementById("enlarge15token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
+	document.getElementById("enlarge15token").innerHTML += '<img src="images/gigachad_express.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
 	document.getElementById("enlarge25token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
 	document.getElementById("enlarge35token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
 	document.getElementById("enlarge12token").innerHTML += '<img src="images/electric_icon.png" height="60" width="48" alt="" style="position: relative; top: -20px;" />';
@@ -108,7 +108,7 @@ square[34] = new Square("Shadow Wizard St.", "320 aura", "#008000", 320, 9, 28, 
 square[35] = new Square("Morbin' Time Tax", "200 aura", "#FFFFFF", 200, 1);
 square[36] = new Square("Metal Pipe Falls Blvd", "FOLLOW INSTRUCTIONS ON TOP CARD", "#FFFFFF");
 square[37] = new Square("Coffin of Andy Way", "350 aura", "#0000FF", 350, 10, 35, 175, 500, 1100, 1300, 1500);
-square[38] = new Square("PLUH Tax", "Pay 100 aura", "#FFFFFF");
+square[38] = new Square("Fanum Tax", "Pay 100 aura", "#FFFFFF");
 square[39] = new Square("Boarding Vibes Lane", "400 aura", "#0000FF", 400, 10, 50, 200, 600, 1400, 1700, 2000);
 
 var communityChestCards = [];
