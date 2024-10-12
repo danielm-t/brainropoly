@@ -12,8 +12,8 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = Math.floor(Math.random() * 6) + 1;
-		die2 = Math.floor(Math.random() * 6) + 1;
+		die1 = 10;
+		die2 = 10;
 		areDiceRolled = true;
 	};
 
@@ -841,14 +841,14 @@ function Game() {
 			initiator.pay(money, recipient.index);
 			recipient.money += money;
 
-			addAlert(recipient.name + " received $" + money + " from " + initiator.name + ".");
+			addAlert(recipient.name + " received " + money + " aura from " + initiator.name + ".");
 		} else if (money < 0) {
 			money = -money;
 
 			recipient.pay(money, initiator.index);
 			initiator.money += money;
 
-			addAlert(initiator.name + " received $" + money + " from " + recipient.name + ".");
+			addAlert(initiator.name + " received " + money + " aura from " + recipient.name + ".");
 		}
 
 		updateOwned();
@@ -1113,7 +1113,7 @@ function Player(name, color) {
 	this.name = name;
 	this.color = color;
 	this.position = 0;
-	this.money = 1500;
+	this.money = 9001;
 	this.creditor = -1;
 	this.jail = false;
 	this.jailroll = 0;
@@ -1949,9 +1949,9 @@ function streetrepairs(houseprice, hotelprice) {
 
 		// If function was called by Community Chest.
 		if (houseprice === 40) {
-			addAlert(p.name + " lost $" + cost + " to Community Chest.");
+			addAlert(p.name + " lost " + cost + " aura to Community Chest.");
 		} else {
-			addAlert(p.name + " lost $" + cost + " to Chance.");
+			addAlert(p.name + " lost " + cost + " aura to Chance.");
 		}
 	}
 
@@ -2294,6 +2294,9 @@ function land(increasedRent) {
 	document.getElementById("landed").innerHTML = "You landed on " + s.name + ".";
 	s.landcount++;
 	addAlert(p.name + " landed on " + s.name + ".");
+	console.log(s);
+	if (s.name == "9001 Zone" && p.money > 9000)
+		console.log("player " + p.name + " has won because they have over 9000 aura.")
 
 	// Allow player to buy the property on which he landed.
 	if (s.price !== 0 && s.owner === 0) {
@@ -2392,7 +2395,7 @@ function land(increasedRent) {
 		updatePosition();
 
 		if (p.human) {
-			popup("<div>Go to jail. Go directly to Jail. Do not pass GO. Do not collect $200.</div>", gotojail);
+			popup("<div>Go directly to Jail. Do not pass Vibe Check Avenue</div>", gotojail);
 		} else {
 			gotojail();
 		}
@@ -2818,7 +2821,7 @@ window.onload = function() {
 
 	// Add images to enlarges.
 	document.getElementById("enlarge0token").innerHTML += '<img src="images/arrow_icon.png" height="40" width="136" alt="" />';
-	document.getElementById("enlarge20price").innerHTML += "<img src='images/free_parking_icon.png' height='80' width='72' alt='' style='position: relative; top: -20px;' />";
+	//document.getElementById("enlarge20price").innerHTML += "<img src='images/free_parking_icon.png' height='80' width='72' alt='' style='position: relative; top: -20px;' />";
 	document.getElementById("enlarge38token").innerHTML += '<img src="images/tax_icon.png" height="60" width="70" alt="" style="position: relative; top: -20px;" />';
 
 	corrections();
