@@ -1,3 +1,5 @@
+const alreadyOwnedSound = new Audio('sounds/hellnah.mp3');
+
 function Game() {
 	var die1;
 	var die2;
@@ -10,8 +12,8 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = 1;
-		die2 = 2;
+		die1 = Math.floor(Math.random() * 6) + 1;
+		die2 = Math.floor(Math.random() * 6) + 1;
 		areDiceRolled = true;
 	};
 
@@ -24,7 +26,7 @@ function Game() {
 			p.AI.payDebt();
 
 			if (p.money < 0) {
-				popup("<p>" + p.name + " is bankrupt. All of its assets will be turned over to " + player[p.creditor].name + ".</p>", game.bankruptcy);
+				popup("<p>" + p.name + " has no rizz left. All of its assets will be turned over to " + player[p.creditor].name + ".</p>", game.bankruptcy);
 			} else {
 				roll();
 			}
@@ -1097,8 +1099,8 @@ function Game() {
 		if (pcount === 2 || bankruptcyUnmortgageFee === 0 || p.creditor === 0) {
 			game.eliminatePlayer();
 		} else {
-			addAlert(pcredit.name + " paid $" + bankruptcyUnmortgageFee + " interest on the mortgaged properties received from " + p.name + ".");
-			popup("<p>" + pcredit.name + ", you must pay $" + bankruptcyUnmortgageFee + " interest on the mortgaged properties you received from " + p.name + ".</p>", function() {player[pcredit.index].pay(bankruptcyUnmortgageFee, 0); game.bankruptcyUnmortgage();});
+			addAlert(pcredit.name + " paid " + bankruptcyUnmortgageFee + " aura interest on the mortgaged properties received from " + p.name + ".");
+			popup("<p>" + pcredit.name + ", you must pay " + bankruptcyUnmortgageFee + " aura interest on the mortgaged properties you received from " + p.name + ".</p>", function() {player[pcredit.index].pay(bankruptcyUnmortgageFee, 0); game.bankruptcyUnmortgage();});
 		}
 	};
 
@@ -2314,6 +2316,8 @@ function land(increasedRent) {
 		var groupowned = true;
 		var rent;
 
+		alreadyOwnedSound.play();
+
 		// Railroads
 		if (p.position == 5 || p.position == 15 || p.position == 25 || p.position == 35) {
 			if (increasedRent) {
@@ -2372,7 +2376,6 @@ function land(increasedRent) {
 		addAlert(p.name + " paid " + rent + " aura to " + player[s.owner].name + ".");
 		p.pay(rent, s.owner);
 		player[s.owner].money += rent;
-
 		document.getElementById("landed").innerHTML = "You landed on " + s.name + ". " + player[s.owner].name + " collected " + rent + " aura.";
 	} else if (s.owner > 0 && s.owner != turn && s.mortgage) {
 		document.getElementById("landed").innerHTML = "You landed on " + s.name + ". Property is mortgaged; no aura was collected.";
