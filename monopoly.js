@@ -12,8 +12,10 @@ function Game() {
 	var auctionproperty;
 
 	this.rollDice = function() {
-		die1 = 10;
-		die2 = 10;
+		die1 = Math.floor(Math.random() * 6) + 1;
+		die2 = Math.floor(Math.random() * 6) + 1;
+		// die1 = 15;
+		// die2 = 15;
 		areDiceRolled = true;
 	};
 
@@ -2480,7 +2482,7 @@ function roll() {
 
 	if (p.jail === true) {
 		p.jailroll++;
-
+		showRandomGif();
 		updateDice(die1, die2);
 		if (die1 == die2) {
 			document.getElementById("jail").style.border = "1px solid black";
@@ -2538,6 +2540,84 @@ function roll() {
 	}
 }
 
+function showRandomGif() {
+    const gifContainer = document.createElement("div");
+    gifContainer.id = "gifContainer";
+    gifContainer.style.position = "fixed";
+    gifContainer.style.top = "0";
+    gifContainer.style.left = "0";
+    gifContainer.style.width = "100%";
+    gifContainer.style.height = "100%";
+    gifContainer.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    gifContainer.style.zIndex = "9999";
+    gifContainer.style.display = "flex";
+    gifContainer.style.flexDirection = "column"; 
+    gifContainer.style.justifyContent = "center";
+    gifContainer.style.alignItems = "center";
+
+    const gifs = [
+        "gifs/jail/1.gif",
+        "gifs/jail/2.gif",
+        "gifs/jail/3.webp",
+        "gifs/jail/4.webp",
+        "gifs/jail/5.webp",
+    ];
+    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+
+    const img = document.createElement("img");
+    img.src = randomGif;
+    img.style.maxWidth = "80%";
+    img.style.maxHeight = "80%";
+    gifContainer.appendChild(img);
+
+    // Create the text element
+    const text = document.createElement("div");
+    text.textContent = "You've been doomed to watch brainrot for 60 seconds!";
+    text.style.color = "white";
+    text.style.marginTop = "20px";
+    text.style.fontSize = "20px";
+    text.style.textAlign = "center";
+    gifContainer.appendChild(text);
+
+    const progressBarContainer = document.createElement("div");
+    progressBarContainer.style.width = "40%";
+    progressBarContainer.style.height = "20px";
+    progressBarContainer.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+    progressBarContainer.style.borderRadius = "10px";
+    progressBarContainer.style.overflow = "hidden";
+    progressBarContainer.style.marginTop = "10px"; 
+    gifContainer.appendChild(progressBarContainer);
+
+    const progressBar = document.createElement("div");
+    progressBar.style.height = "100%";
+    progressBar.style.width = "100%";
+    progressBar.style.backgroundColor = "red";
+    progressBar.style.transition = "width 1s linear";
+    progressBarContainer.appendChild(progressBar);
+
+    let remainingTime = 60;
+    const decrementTime = () => {
+        remainingTime -= 1;
+        const percentage = (remainingTime / 60) * 100;
+        progressBar.style.width = `${percentage}%`;
+        
+        if (remainingTime <= 0) {
+            clearInterval(countdown);
+        }
+    };
+
+    const countdown = setInterval(decrementTime, 1000);
+
+    document.body.appendChild(gifContainer);
+
+    setTimeout(() => {
+        clearInterval(countdown);
+        document.body.removeChild(gifContainer);
+    }, 60000);
+}
+
+
+
 function play() {
 	if (game.auction()) {
 		return;
@@ -2573,20 +2653,20 @@ function play() {
 
 	if (p.jail) {
 		$("#landed").show();
-		document.getElementById("landed").innerHTML = "You are in jail.<input type='button' title='Pay $50 fine to get out of jail immediately.' value='Pay $50 fine' onclick='payfifty();' />";
+		document.getElementById("landed").innerHTML = "You are in jail.<input type='button' title='Lose 50 aura to get out of jail immediately.' value='Lose 50 aura' onclick='payfifty();' />";
 
 		if (p.communityChestJailCard || p.chanceJailCard) {
 			document.getElementById("landed").innerHTML += "<input type='button' id='gojfbutton' title='Use &quot;Get Out of Jail Free&quot; card.' onclick='useJailCard();' value='Use Card' />";
 		}
 
-		document.getElementById("nextbutton").title = "Roll the dice. If you throw doubles, you will get out of jail.";
+		document.getElementById("nextbutton").title = "Watch some brainrot and roll the dice. If you throw doubles, you will get out of jail.";
 
 		if (p.jailroll === 0)
 			addAlert("This is " + p.name + "'s first turn in jail.");
 		else if (p.jailroll === 1)
 			addAlert("This is " + p.name + "'s second turn in jail.");
 		else if (p.jailroll === 2) {
-			document.getElementById("landed").innerHTML += "<div>NOTE: If you do not throw doubles after this roll, you <i>must</i> pay the $50 fine.</div>";
+			document.getElementById("landed").innerHTML += "<div>NOTE: If you do not throw doubles after this roll, you <i>must</i> lost 50 aura.</div>";
 			addAlert("This is " + p.name + "'s third turn in jail.");
 		}
 
